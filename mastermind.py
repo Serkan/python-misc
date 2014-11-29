@@ -137,14 +137,21 @@ def play_codemaker():
         except (NameError, ValueError, SyntaxError):
             print "Please enter in a proper format, like 2, 1"
             continue
-        if black == 4:
+        if black == 4 and white == 0:
             print "I broke the code :)"
             break
         # filter possible guess list and continue
-        pos_secret_list = [p for p in pos_secret_list if break_code(guess, p) == res]
-        guess = max(pos_secret_list,
-                    key=lambda x: min(sum(1 for p in pos_secret_list
-                                          if break_code(p, x) != r) for r in results))
+        try:
+            # dont mutate the pos_secret_list unless
+            # you certain response is proper
+            temp = [p for p in pos_secret_list if break_code(guess, p) == res]
+            guess = max(temp,
+                        key=lambda x: min(sum(1 for p in temp
+                                              if break_code(p, x) != r) for r in results))
+        except ValueError:
+            print "You entered an impossible response, please try again"
+            continue
+        pos_secret_list = temp
         step += 1
 
 
