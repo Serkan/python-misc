@@ -95,8 +95,8 @@ def play_codebreaker():
     while 1:
         step += 1
         if step > 12:
-            print "You could not solve the scret in 12 steps. You lost the game"
-            break
+            print "You could not solve the secret in 12 steps. You lost the game"
+            exit()
         try:
             guess = raw_input("Guess my combination ? >")
             __raise_err_if_invalid__(guess)
