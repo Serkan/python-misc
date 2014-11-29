@@ -90,7 +90,11 @@ def play_codebreaker():
     # select a secret from colors set
     secret = random.sample(colors, 4)
     # keep asking until the user breaks the code
+    i = 1
     while 1:
+        i += 1
+        if i > 12:
+            print "You could not solve the scret in 12 steps. You lost the game"
         try:
             guess = raw_input("Guess my combination ? \n")
             __raise_err_if_invalid__(guess)
@@ -120,6 +124,9 @@ def play_codemaker():
     guess = "ccbb"
     i = 1
     while 1:
+        if i > 11:
+            print "I could not break the code in 12 step, i lost the game"
+            break
         print "My %d. guess is %s" % (i, guess)
         i += 1
         # get input of black and white pegs
