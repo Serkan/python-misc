@@ -31,10 +31,10 @@ def start_game():
 
     try:
         option = int(raw_input("Which one you are? [default] codebreaker"
-                               " or [1] codemaker : \n") or 0)
+                               " or [1] codemaker >") or 0)
     except ValueError:
         __invalid_start__()
-    if (option not in (0, 1)):
+    if option not in (0, 1):
         __invalid_start__()
     dispatch(option)
 
@@ -54,13 +54,12 @@ def break_code(guess, secret):
     Calculates response as count of  black and white peg(s).
     :param guess:  guessed permutation
     :param secret: the secret which is trying to be found
-    :return:
     """
     z = zip(guess, secret)
     # find exact matches (color and positions)
     black = [(x, y) for (x, y) in z if x == y]
     black_count = len(black)
-    if (len(black) == 4):
+    if len(black) == 4:
         white_count = 0
     else:
         # filter z from exact mathes to find white peg count
@@ -83,7 +82,7 @@ def play_codebreaker():
         if len(value) != 4:
             raise ValueError
         for ch in value:
-            if (ch not in colors.keys()):
+            if ch not in colors.keys():
                 raise ValueError
 
     print "You selected to be the codebreaker"
@@ -95,15 +94,16 @@ def play_codebreaker():
         i += 1
         if i > 12:
             print "You could not solve the scret in 12 steps. You lost the game"
+            break
         try:
-            guess = raw_input("Guess my combination ? \n")
+            guess = raw_input("Guess my combination ? >")
             __raise_err_if_invalid__(guess)
         except ValueError:
             print 'You must select four color codes from %s ' % colors.values()
             print 'Use first letters as color identifier,For instance: cbrg <ENTER>'
             continue
         black, white = break_code(guess, secret)
-        if (black == 4):
+        if black == 4:
             print "You have got 4 (b)lack, you broke the code!!"
             break
         else:
@@ -131,7 +131,7 @@ def play_codemaker():
         i += 1
         # get input of black and white pegs
         res = (black, white) = input("Please enter how many black and "
-                                     "white I have got : ")
+                                     "white I have got >")
         if black == 4:
             print "I broke the code :)"
             break
@@ -139,7 +139,7 @@ def play_codemaker():
         pos_secret_list = [p for p in pos_secret_list if break_code(guess, p) == res]
         guess = max(pos_secret_list,
                     key=lambda x: min(sum(1 for p in pos_secret_list
-                                          if break_code(p, x) != res) for res in results))
+                                          if break_code(p, x) != r) for r in results))
 
 
 if __name__ == "__main__":
