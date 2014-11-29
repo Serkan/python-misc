@@ -1,6 +1,8 @@
 """
 Mastermind game console, coded for 'BCO 601 Python Programlama'
 course in Hacettepe University.
+
+Coded in Python 2.7.6
 """
 __all__ = [
     # Public API for external usages
@@ -89,10 +91,10 @@ def play_codebreaker():
     # select a secret from colors set
     secret = random.sample(colors, 4)
     # keep asking until the user breaks the code
-    i = 1
+    step = 1
     while 1:
-        i += 1
-        if i > 12:
+        step += 1
+        if step > 12:
             print "You could not solve the scret in 12 steps. You lost the game"
             break
         try:
@@ -122,16 +124,19 @@ def play_codemaker():
     # colors may change but two one and two another one gives us an
     # important edge
     guess = "ccbb"
-    i = 1
+    step = 1
     while 1:
-        if i > 11:
-            print "I could not break the code in 12 step, i lost the game"
+        if step > 11:
+            print "I could not break the code in 12 step, step lost the game"
             break
-        print "My %d. guess is %s" % (i, guess)
-        i += 1
+        print "My %d. guess is %s" % (step, guess)
         # get input of black and white pegs
-        res = (black, white) = input("Please enter how many black and "
-                                     "white I have got >")
+        try:
+            res = (black, white) = input("Please enter how many black and "
+                                         "white I have got >")
+        except (NameError, ValueError, SyntaxError):
+            print "Please enter in a proper format, like 2, 1"
+            continue
         if black == 4:
             print "I broke the code :)"
             break
@@ -140,6 +145,7 @@ def play_codemaker():
         guess = max(pos_secret_list,
                     key=lambda x: min(sum(1 for p in pos_secret_list
                                           if break_code(p, x) != r) for r in results))
+        step += 1
 
 
 if __name__ == "__main__":
