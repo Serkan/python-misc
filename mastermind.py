@@ -28,12 +28,12 @@ def start_game():
 
     def __invalid_start__():
         """Game goes on in loop unless to take a proper player parameter.  """
-        print "Please enter 1 or 0 [Default] to play"
+        print("Please enter 1 or 0 [Default] to play")
         start_game()
 
     try:
-        option = int(raw_input("Which one you are? [default] codebreaker"
-                               " or [1] codemaker >") or 0)
+        option = int(input("Which one you are? [default] codebreaker"
+                           " or [1] codemaker >") or 0)
     except ValueError:
         __invalid_start__()
     if option not in (0, 1):
@@ -87,34 +87,34 @@ def play_codebreaker():
             if ch not in colors.keys():
                 raise ValueError
 
-    print "You selected to be the codebreaker"
+    print("You selected to be the codebreaker")
     # select a secret from colors set
-    secret = random.sample(colors, 4)
+    secret = random.sample(colors.keys(), 4)
     # keep asking until the user breaks the code
     step = 1
     while 1:
         step += 1
         if step > 12:
-            print "You could not solve the secret in 12 steps. You lost the game"
+            print ("You could not solve the secret in 12 steps. You lost the game")
             exit()
         try:
-            guess = raw_input("Guess my combination ? >")
+            guess = input("Guess my combination ? >")
             __raise_err_if_invalid__(guess)
         except ValueError:
-            print 'You must select four color codes from %s ' % colors.values()
-            print 'Use first letters as color identifier,For instance: cbrg <ENTER>'
+            print('You must select four color codes from ' + colors.values())
+            print('Use first letters as color identifier,For instance: cbrg <ENTER>')
             continue
         black, white = break_code(guess, secret)
         if black == 4:
-            print "You have got 4 (b)lack, you broke the code!!"
+            print("You have got 4 (b)lack, you broke the code!!")
             break
         else:
-            print "you have got %s (b)lack and %s (w)hite" % (black, white)
+            print("you have got %s (b)lack and %s (w)hite " + (black, white))
 
 
 def play_codemaker():
     """The computer is code breaker """
-    print "You selected to be the codemaker"
+    print("You selected to be the codemaker")
     # knuth five guesses algorithm implemented 
     pos_secret_list = [p for p in itertools.product(colors.keys(), repeat=4)]
     results = [(right, wrong) for right in range(5)
@@ -127,18 +127,18 @@ def play_codemaker():
     step = 1
     while 1:
         if step > 11:
-            print "I could not break the code in 12 step, step lost the game"
+            print("I could not break the code in 12 step, step lost the game")
             break
-        print "My %d. guess is %s" % (step, guess)
+        print ("My " + str(step) + ". guess is " + str(guess))
         # get input of black and white pegs
         try:
             res = (black, white) = input("Please enter how many black and "
                                          "white I have got >")
         except (NameError, ValueError, SyntaxError):
-            print "Please enter in a proper format, like 2, 1"
+            print("Please enter in a proper format, like 2, 1")
             continue
         if black == 4 and white == 0:
-            print "I broke the code :)"
+            print("I broke the code :)")
             break
         # filter possible guess list and continue
         try:
@@ -149,7 +149,7 @@ def play_codemaker():
                         key=lambda x: min(sum(1 for p in temp
                                               if break_code(p, x) != r) for r in results))
         except ValueError:
-            print "You entered an impossible response, please try again"
+            print("You entered an impossible response, please try again")
             continue
         pos_secret_list = temp
         step += 1
