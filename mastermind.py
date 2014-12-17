@@ -2,7 +2,7 @@
 Mastermind game console, coded for 'BCO 601 Python Programlama'
 course in Hacettepe University.
 
-Coded in Python 2.7.6
+Coded in Python 3.4
 """
 __all__ = [
     # Public API for external usages
@@ -11,12 +11,13 @@ __all__ = [
 
 __author__ = "Serkan Turgut"
 __date__ = '28-11-2014'
-__version__ = '1.0'
+__version__ = '1.1'
 __email__ = "serkan.turgut0@gmail.com"
 __status__ = "Production"
 
 import random
 import itertools
+import sys
 
 
 def start_game():
@@ -57,7 +58,7 @@ def break_code(guess, secret):
     :param guess:  guessed permutation
     :param secret: the secret which is trying to be found
     """
-    z = zip(guess, secret)
+    z = list(zip(list(guess), secret))
     # find exact matches (color and positions)
     black = [(x, y) for (x, y) in z if x == y]
     black_count = len(black)
@@ -66,9 +67,12 @@ def break_code(guess, secret):
     else:
         # filter z from exact mathes to find white peg count
         white_candidate = [(x, y) for (x, y) in z if x != y]
-        nguess, nsecret = zip(*white_candidate)
-        white_count = sum([1 for x in set(nguess) if x in nsecret])
-    return black_count, white_count
+        if len(white_candidate) > 0:
+            nguess, nsecret = zip(*white_candidate)
+            white_count = sum([1 for x in set(nguess) if x in nsecret])
+        else:
+            white_count = 0
+    return str(black_count), str(white_count)
 
 
 def play_codebreaker():
@@ -93,15 +97,15 @@ def play_codebreaker():
     # keep asking until the user breaks the code
     step = 1
     while 1:
-        step += 1
         if step > 12:
             print ("You could not solve the secret in 12 steps. You lost the game")
             exit()
         try:
             guess = input("Guess my combination ? >")
             __raise_err_if_invalid__(guess)
+            step += 1
         except ValueError:
-            print('You must select four color codes from ' + colors.values())
+            print('You must select four color codes from ' + str(colors.values()))
             print('Use first letters as color identifier,For instance: cbrg <ENTER>')
             continue
         black, white = break_code(guess, secret)
@@ -109,7 +113,7 @@ def play_codebreaker():
             print("You have got 4 (b)lack, you broke the code!!")
             break
         else:
-            print("you have got %s (b)lack and %s (w)hite " + (black, white))
+            print("you have got " + str(black) + " (b)lack and " + str(white) + " (w)hite ")
 
 
 def play_codemaker():
@@ -132,12 +136,13 @@ def play_codemaker():
         print ("My " + str(step) + ". guess is " + str(guess))
         # get input of black and white pegs
         try:
-            res = (black, white) = input("Please enter how many black and "
+            res = input("Please enter how many black and "
                                          "white I have got >")
+            res = black, white = tuple(res.split(","))
         except (NameError, ValueError, SyntaxError):
-            print("Please enter in a proper format, like 2, 1")
+            print("Please enter in a proper format, like 2,1")
             continue
-        if black == 4 and white == 0:
+        if black == '4' and white == '0':
             print("I broke the code :)")
             break
         # filter possible guess list and continue
